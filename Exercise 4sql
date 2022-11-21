@@ -1,0 +1,128 @@
+--Excercise 4
+--a)create table named lms_book_issue
+create table lms_book_issue(
+BOOK_ISSUE_NO NUMBER,
+MEMBER_ID VARCHAR2(100),
+BOOK_CODE VARCHAR2(100),
+DATE_ISSUE DATE,
+DATE_RETURNED DATE,
+FINE_RANGE VARCHAR2(100));
+
+--B)DROP TABLE
+DROP TABLE lms_book_issue;
+
+--C)TABLE CREATED AGAIN FIRING OPTION A
+
+--D)ALTER THE TABLE
+--I)ADD TWO MORE COLUMNS VENDOR_CODE VARCHAR2 PLACE VARCHAR2
+ALTER TABLE lms_book_issue
+ADD VENDOR_CODE VARCHAR2(100)
+ADD PLACE VARCHAR2(100);
+
+--II)RENAME THE PLACE COLUMN NAME TO VENDOR_PLACE
+ALTER TABLE lms_book_issue
+RENAME COLUMN PLACE TO VENDOR_PLACE;
+
+SELECT * FROM lms_book_issue;
+--III)DROP THE VENDOR_CODE COLUMN
+ALTER TABLE lms_book_issue
+DROP COLUMN VENDOR_CODE;
+
+--IV)RENAME THE TABLE TO lms_book_issue_p.
+RENAME lms_book_issue TO lms_book_issue_p;
+
+--E)INSERT FOLLOWING DATA
+INSERT INTO lms_book_issue_p(BOOK_ISSUE_NO,MEMBER_ID,BOOK_CODE,DATE_ISSUE,DATE_RETURNED,FINE_RANGE)
+VALUES(6,'LM003','BL000007',TO_DATE('22-04-2012','DD-MM-YYYY'),TO_DATE('07-05-2012','DD-MM-YYYY'));
+
+INSERT INTO lms_book_details_p(book_code,BOOK_TITLE,CATEGORY,AUTHOR,PUBLICATION,PUBLISH_DATE,BOOK_EDITION,PRICE,RACK_NUM,DATE_ARRIVAL,SUPPLIER_ID)
+VALUES('BL000002',
+'Java: The Complete Reference',
+'JAVA',
+'Herbert Schildt', 
+'Tata Mcgraw Hill',
+TO_DATE('10-10-2011','dd-mm-yyyy'),
+5,
+750,
+'A1',
+TO_DATE('10-05-2011','DD-MM-YYYY')
+,'S03');
+--[2 ROWS]
+DELETE FROM lms_book_details_p;
+--[ 0 ROWS]
+ --G)INSERT THE DATA BACK AGAIN IN POINT (E)
+ SELECT * FROM LMS_BOOK_DETAILS_P;
+--[2 ROWS]
+--H)UPDATE FOR ALL ROWS CATEGORY COLUMN TO 'JUNK'
+UPDATE LMS_BOOK_DETAILS_P
+SET  CATEGORY = 'JUNK';
+ SELECT * FROM LMS_BOOK_DETAILS_P;
+ --[2 ROWS]
+ INSERT INTO lms_book_details_p(book_code,BOOK_TITLE,CATEGORY,AUTHOR,PUBLICATION,PUBLISH_DATE,BOOK_EDITION,PRICE,RACK_NUM,DATE_ARRIVAL,SUPPLIER_ID)
+VALUES('BL000003',
+'Java How to do program',
+'JAVA',
+'Paul J. Deitel', 
+'Prentice Hall',
+TO_DATE('10-05-1999','dd-mm-yyyy'),
+6,
+600,
+'A1',
+TO_DATE('10-05-2012','DD-MM-YYYY')
+,'S01');
+ --[3 rows]
+ rollback;
+ 
+ --[0 rows]
+SELECT * FROM LMS_BOOK_DETAILS_P;
+--[0 rows]
+INSERT INTO lms_book_details_p(book_code,BOOK_TITLE,CATEGORY,AUTHOR,PUBLICATION,PUBLISH_DATE,BOOK_EDITION,PRICE,RACK_NUM,DATE_ARRIVAL,SUPPLIER_ID)
+VALUES('BL000003',
+'Java How to do program',
+'JAVA',
+'Paul J. Deitel', 
+'Prentice Hall',
+TO_DATE('10-05-1999','dd-mm-yyyy'),
+6,
+600,
+'A1',
+TO_DATE('10-05-2012','DD-MM-YYYY')
+,'S01');
+--[1 row]
+
+SELECT * FROM LMS_BOOK_DETAILS_P;
+--[1 row}
+commit;
+--[1 row]
+ savepoint s1;
+ INSERT INTO lms_book_details_p(book_code,BOOK_TITLE,CATEGORY,AUTHOR,PUBLICATION,PUBLISH_DATE,BOOK_EDITION,PRICE,RACK_NUM,DATE_ARRIVAL,SUPPLIER_ID)
+VALUES('BL000004',
+'Java: The Complete Reference',
+'JAVA',
+'Herbert Schildt', 
+'Tata McGraw Hill',
+TO_DATE('10-10-2011','dd-mm-yyyy'),
+5,
+750,
+'A1',
+TO_DATE('11-05-2012','DD-MM-YYYY')
+,'S01');
+--[2 row]
+savepoint s2;
+ INSERT INTO lms_book_details_p(book_code,BOOK_TITLE,CATEGORY,AUTHOR,PUBLICATION,PUBLISH_DATE,BOOK_EDITION,PRICE,RACK_NUM,DATE_ARRIVAL,SUPPLIER_ID)
+VALUES('BL000005',
+'Java How to do program',
+'JAVA',
+'Paul J. Deitel', 
+'Prentice Hall',
+TO_DATE('10-05-1999','dd-mm-yyyy'),
+6,
+600,
+'A1',
+TO_DATE('10-05-2012','DD-MM-YYYY')
+,'S01');
+--[3 rows]
+rollback to savepoint s2;
+--[2 rows]
+select * from lms_book_details_p;
+--[2 rows]
