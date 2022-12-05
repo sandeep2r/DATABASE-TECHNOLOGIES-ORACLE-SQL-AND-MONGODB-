@@ -1,0 +1,251 @@
+-- create a table 
+create table test ( a number);
+
+-- insert some data to the table 
+insert into test 
+select level from dual connect by level <=100000;
+
+-- explain plan this without the index
+SELECT count(*) FROM TEST ;
+SELECT * FROM TEST where a = 99 ;
+
+-- create a unique index 
+drop index my_first_index ;
+create unique index my_first_index on test(a);
+select * from user_indexes where index_name = 'MY_FIRST_INDEX';
+
+-- explain plan this with the index
+SELECT * FROM TEST where a = 99 ;
+
+-- Function based indexes 
+
+-- drop the table 
+drop table test purge;
+create table test ( a VARCHAR2(100));
+
+-- insert some data 
+insert into test 
+select level+100000 || 'lowercase' from dual connect by level <=100000
+
+-- explain plan this without the index
+SELECT count(*) FROM TEST ;
+SELECT * FROM TEST where a = '99lowercase';
+SELECT * FROM TEST where UPPER(a) = '99LOWERCASE';
+
+-- create a function based index 
+CREATE INDEX MY_func_INDEX ON TEST (UPPER(a));
+
+-- create a bitmap index
+CREATE bitmap INDEX MY_bitmap_INDEX ON TEST (a);
+
+-- create a index on the varchar2 column 
+drop index my_second_index ;
+create index my_second_index on test(a);
+select * from user_indexes where index_name = 'MY_SECOND_INDEX';
+select * from user_ind_columns where index_name = 'MY_SECOND_INDEX';
+--------------------------------------------------------------------
+------------------------------------
+
+MONGODB STARTS HERE 
+
+--------------------------------------------------------------------
+-----------------------------------------------------------------
+
+-- SQL to MongoDB Mapping Chart
+https://docs.mongodb.com/manual/reference/sql-comparison/
+
+-- Local mongo db database download Link
+https://www.mongodb.com/try/download/community
+
+
+STUDIO 3T IDE to download 
+----------------------
+
+https://studio3t.com/download/?utm_source=adwords&utm_medium=ppc&utm_term=studio3t&utm_campaign=Leads-Search-244&hsa_net=adwords&hsa_ad=618895272665&hsa_src=g&hsa_ver=3&hsa_grp=144449869870&hsa_acc=1756351187&hsa_tgt=aud-401416985180:kwd-1795944105357&hsa_mt=p&hsa_kw=studio3t&hsa_cam=10444498727&gclid=Cj0KCQiA4aacBhCUARIsAI55maH3D6d_8zZKKQN9XBcRvpNukEDiFshxeC4j6nWgE_ZwFl8H7-vzbLoaAl6nEALw_wcB
+
+-- installation guide for studio 3t
+https://studio3t.com/knowledge-base/articles/installation/
+
+----------------------------------
+
+
+-----------------------
+Mongodb
+-----------------------
+
+Is a NOSQL , document oriented database 
+
+table -- collection
+row -- document 
+
+{
+ key : value  
+}
+
+student record 
+{
+ "name" : "gaurav"
+ 
+}
+
+
+// Json looks like this 
+{
+	key : value ,
+	key1: value2,
+	key3:value3
+}
+
+
+	value : number
+	value : string
+	value : float
+	value : double
+	value : array
+	value : date
+
+// sample json 
+{
+ "rollno" : 1,
+ "price" : 1.1,
+ "address" : "pune",
+ "name" : { first_name : "gaurav" , last_name : "rajput"}
+ "phone_number" : [12345,67890,98765,76542],
+ "courses_taken" : ["dbda","diot","dac"],
+ "student_details" : [{course_name: "dac" , total_count : 250},
+					{course_name : "diot" , total_count : 50},
+					{course_name : "dbda" , total_count : 120}
+					]
+}
+
+// another example of json
+{
+supplier_id : "s01",
+books_supplied : [
+					{
+					 book_code : 'BL001'	,
+					 book_name : 'Lets Us C  '
+					},
+					{
+					 book_code : 'BL002'	,
+					 book_name : 'Java how to program'
+					}
+					]
+}
+
+
+
+/* DEMO CRUD */
+db.createCollection('my_first_collection_singlequote')
+show collections;
+
+
+// insert
+db.my_first_collection.insertOne(  { "my_first_field" : "ONE" }   );
+db.my_first_collection.insertOne(  { "my_second_field" : "SECOND" }   );
+db.my_first_collection.insertOne( {
+                                    	"my_first_field": "ONE",
+                                    	"my_second_field": "SECOND"
+                                   }
+                                 );
+
+db.my_first_collection.insertOne( {
+                                    	"my_third_field": "THIRD",
+                                    	"my_fourth_field": "FOURTH"
+                                   }
+                                 );
+
+
+// see insert
+db.my_first_collection.find();
+
+// insert mutliple documents
+db.my_first_collecton.insertMany(
+[
+	{
+											"my_third_field": "THIRD",
+											"my_fourth_field": "FOURTH"
+	},
+	{
+											"my_third_field": "ONE",
+											"my_fourth_field": "TWO"
+	},
+	{
+											"my_third_field": "ONE",
+											"my_fourth_field": "FOURTH"
+	}
+]
+);
+ 
+show collections
+
+db.my_first_collecton.find();
+
+// correct insert many 
+db.my_first_collection.insertMany(
+[
+	{
+											"my_third_field": "THIRD",
+											"my_fourth_field": "FOURTH"
+	},
+	{
+											"my_first_field": "ONE",
+											"my_second_field": "TWO"
+	},
+	{
+											"my_first_field": "ONE",
+											"my_fourth_field": "FOURTH"
+	}
+]
+);
+
+db.my_first_collection.find();
+
+
+// insert one ( case insensitive ) 
+
+db.my_first_collectIon.insertOne( {
+                                    	"my_third_field": "THIRD",
+                                    	"my_fourth_field": "FOURTH"
+                                   }
+                                 );
+
+
+show collections
+
+// insert my object _id
+
+db.my_first_collectIon.insertOne( {
+                                    	"_id" : 1234567,
+                                    	"my_third_field": "THIRD",
+                                    	"my_fourth_field": "FOURTH"
+                                   }
+                                 ); 
+
+db.my_first_collectIon.insertOne( {
+                                    	"_id" : "My_string",
+                                    	"my_third_field": "THIRD",
+                                    	"my_fourth_field": "FOURTH"
+                                   }
+                                 );   
+
+// this fails because of duplicate _id
+db.my_first_collectIon.insertOne( {
+                                    	"_id" : "My_string",
+                                    	"my_third_field": "THIRD",
+                                    	"my_fourth_field": "FOURTH"
+                                   }
+                                 );   
+                                 
+
+db.my_first_collectIon.find();                                 
+// lets try to insert same _id against different collection 
+db.my_first_collection.insertOne( {
+                                    	"_id" : "My_string",
+                                    	"my_third_field": "THIRD",
+                                    	"my_fourth_field": "FOURTH"
+                                   }
+                                 );   
+                                                                                                                            
+db.my_first_collection.find();    
+

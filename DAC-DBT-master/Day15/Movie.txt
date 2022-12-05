@@ -1,0 +1,228 @@
+--------------------------------------------------------------------
+
+1- create a databasse named BOXOFFICE
+	use BOXOFFICE  //switch to agiven database
+------------------------------------------------------------------------	
+2- create a collection named movie
+	db.createCollection("movie")  //creatae the collection
+------------------------------------------------------------------------	
+3- insert one document {name: 'Pardes',"Box_office_collection": 900000,"invested_amount": 30000 }
+	
+db.movie.insertOne(
+{name: 'Pardes',"Box_office_collection": 900000,"invested_amount": 30000 }
+)
+------------------------------------------------------------------------
+4- insert one document {name: "DDLJ"  , "box_office_collection": 4000,"invested_amount": 10000}
+
+db.movie.insertOne(
+{name: "DDLJ","Box_office_collection": 4000,"invested_amount": 10000}
+)
+------------------------------------------------------------------------
+5- insert many documents
+	 {name: 'Hulk',"Box_office_collection": 200000,"invested_amount": 10000,"genre": "fiction"}
+	 {name: 'Iron man',"Box_office_collection": 400000,"invested_amount": 343400,"genre": "Marvel studios" }
+	 
+db.movie.insertMany(
+[
+{name: 'Hulk',"Box_office_collection": 200000,"invested_amount": 10000,"genre": "fiction"},
+{name: 'Iron man',"Box_office_collection": 400000,"invested_amount": 343400,"genre": "Marvel studios" }
+]
+)
+------------------------------------------------------------------------
+6- display the inserted documents using find function syntax:
+
+db.movie.find();
+------------------------------------------------------------------------
+7-drop the collection named movie.	
+
+db.movie.drop();  
+------------------------------------------------------------------------
+8- display the name of thr movie and the invested_amount using find function 
+
+
+------------------------------------------------------------------------
+9- dislay the name of the movie and th einvested amount whose name =='DDLJ' using find function 
+
+
+------------------------------------------------------------------------
+10- delete the all DDLJ row/documenet in the table
+
+------------------------------------------------------------------------
+11- update the invested_amount where name is ddlj.
+
+--------------------------------------------------------------------
+ /* insert many documents 
+[
+{name: "HULK" , "Box_office_collection" : 200000 , "invested_amount": 1000},
+{name: "IRON MAN" , "Box_office_collection" : 150000 , "invested_amount": 100},
+{name: "HULK" , "Box_office_collection" : 200000 , "invested_amount": 1000},
+{name: "IRON MAN" , "Box_office_collection" : 150000 , "invested_amount": 100},
+{name: "DOCTOR STRANGE" , "Box_office_collection" : 200000 , "invested_amount": -9999},
+{name: "DOCTOR STRANGE" , "Box_office_collection" : 200000 , "invested_amount": -9999},
+{name: "WAQT" , "Box_office_collection" : 150000 , "invested_amount": -9},
+{name: "WAQT" , "Box_office_collection" : 150000 , "invested_amount": -8}
+]
+*/
+
+
+/* delete all documents that has name = HULK */
+
+/* delete any one document that has name = IRON MAN */
+
+/* update the invested_amount to 10,000 for all documents that has name=DOCTOR STRANGE */
+/* update the invested_amount to 10 for any one document that has name=WAQT */
+
+ 
+ /* increase the invested_amount by 999 for all documents that has name=DOCTOR STRANGE */
+// update movie set  invested_amount = invested_amount+999 where name = 'DOCTOR STRANGE' ;
+// incorrect name field updated 
+
+
+/* Output the name of the movie , invested amount of all those whose names have a/A in it */
+
+/* Output the name of the movie , invested amount of all those who invested amount is greater than
+10,000 Hint : use $gt operator to do the comparision */
+
+
+/* Output the name of the movie , invested amount of all those who have genre Fiction 
+( case insensitive search)
+*/
+
+
+
+
+/*
+// Upsert mode on 
+ db.movie.updateOne ({name:"RANDOM"},{$set : {invested_amount : 10 } },{upsert : true})
+
+*/
+
+--- Solution
+--------------------------------------------------------------------
+
+1- create a databasse named BOXOFFICE
+	use BOXOFFICE  //switch to agiven database
+------------------------------------------------------------------------	
+2- create a collection named movie
+	db.createCollection("movie")  //creatae the collection
+
+------------------------------------------------------------------------	
+3- insert one document {name: 'Pardes',"Box_office_collection": 900000,"invested_amount": 30000 }
+	
+db.movie.insertOne(
+{name: 'Pardes',"Box_office_collection": 900000,"invested_amount": 30000 }
+)
+------------------------------------------------------------------------
+4- insert one document {name: "DDLJ"  , "box_office_collection": 4000,"invested_amount": 10000}
+
+db.movie.insertOne(
+{name: "DDLJ","Box_office_collection": 4000,"invested_amount": 10000}
+)
+------------------------------------------------------------------------
+5- insert many documents
+	 {name: 'Hulk',"Box_office_collection": 200000,"invested_amount": 10000,"genre": "fiction"}
+	 {name: 'Iron man',"Box_office_collection": 400000,"invested_amount": 343400,"genre": "Marvel studios" }
+	 
+db.movie.insertMany(
+[
+{name: 'Hulk',"Box_office_collection": 200000,"invested_amount": 10000,"genre": "fiction"},
+{name: 'Iron man',"Box_office_collection": 400000,"invested_amount": 343400,"genre": "Marvel studios" }
+]
+)
+------------------------------------------------------------------------
+6- display the inserted documents using find function syntax:
+
+db.movie.find();
+------------------------------------------------------------------------
+7-drop the collection named movie.	
+
+db.movie.drop();  
+------------------------------------------------------------------------
+8- display the name of thr movie and the invested_amount using find function 
+
+db.movie.find({},{"name":1,"invested_amount":1,_id :0});
+------------------------------------------------------------------------
+9- dislay the name of the movie and th einvested amount whose name =='DDLJ' using find function 
+
+db.movie.find({'name':'DDLJ'},{"name":1,"invested_amount":1});
+------------------------------------------------------------------------
+10- delete the all DDLJ row/documenet in the table
+
+db.movie.deleteMany({name:"DDLJ"});
+
+db.movie.deleteOne({name:"Hulk"});  //if specific one dele
+------------------------------------------------------------------------
+11- update the invested_amount where name is ddlj.
+
+db.movie.updateMany({name:"DDLJ"},{$set :{invested_amount: 0} });
+
+db.movie.updateOne({name:"Pardes"},{$set :{invested_amount: 90} });
+
+--------------------------------------------------------------------
+ /* insert many documents 
+[
+{name: "HULK" , "Box_office_collection" : 200000 , "invested_amount": 1000},
+{name: "IRON MAN" , "Box_office_collection" : 150000 , "invested_amount": 100},
+{name: "HULK" , "Box_office_collection" : 200000 , "invested_amount": 1000},
+{name: "IRON MAN" , "Box_office_collection" : 150000 , "invested_amount": 100},
+{name: "DOCTOR STRANGE" , "Box_office_collection" : 200000 , "invested_amount": -9999},
+{name: "DOCTOR STRANGE" , "Box_office_collection" : 200000 , "invested_amount": -9999},
+{name: "WAQT" , "Box_office_collection" : 150000 , "invested_amount": -9},
+{name: "WAQT" , "Box_office_collection" : 150000 , "invested_amount": -8}
+]
+*/
+
+db.movie.insertMany([
+{name: "HULK" , "Box_office_collection" : 200000 , "invested_amount": 1000},
+{name: "IRON MAN" , "Box_office_collection" : 150000 , "invested_amount": 100},
+{name: "HULK" , "Box_office_collection" : 200000 , "invested_amount": 1000},
+{name: "IRON MAN" , "Box_office_collection" : 150000 , "invested_amount": 100},
+{name: "DOCTOR STRANGE" , "Box_office_collection" : 200000 , "invested_amount": -9999},
+{name: "DOCTOR STRANGE" , "Box_office_collection" : 200000 , "invested_amount": -9999},
+{name: "WAQT" , "Box_office_collection" : 150000 , "invested_amount": -9},
+{name: "WAQT" , "Box_office_collection" : 150000 , "invested_amount": -8}
+])
+
+/* delete all documents that has name = HULK */
+	db.movie.deleteMany({name:"HULK"});
+/* delete any one document that has name = IRON MAN */
+	db.movie.deleteOne({name:"IRON MAN"});
+/* update the invested_amount to 10,000 for all documents that has name=DOCTOR STRANGE */
+ db.movie.updateMany ({name:"DOCTOR STRANGE"},{$set : {invested_amount : 10000 } });
+/* update the invested_amount to 10 for any one document that has name=WAQT */
+ db.movie.updateOne ({name:"WAQT"},{$set : {invested_amount : 10 } });
+
+ db.movie.find();
+ 
+ /* increase the invested_amount by 999 for all documents that has name=DOCTOR STRANGE */
+// update movie set  invested_amount = invested_amount+999 where name = 'DOCTOR STRANGE' ;
+ db.movie.updateMany (
+                     {name:"DOCTOR STRANGE"},
+                     {$inc : {invested_amount: 9999}   }
+                     );
+// incorrect name field updated 
+ db.movie.updateOne ({name:"WAQT"},{$set : {amount : 10 } });
+
+// Upsert mode on 
+ db.movie.updateMany ({name:"RANDOM"},
+                     {
+                         $set : {invested_amount : 10 } ,
+                         $setOnInsert: { "Box_office_collection" : 0.0 , genre : "RANDOM"}
+                     }
+                     ,{upsert : true})
+
+/* Output the name of the movie , invested amount of all those whose names have a/A in it */
+
+db.movie.find({name : /a/i},{name:1,invested_amount:1});
+/* Output the name of the movie , invested amount of all those who invested amount is greater than
+10,000 Hint : use $gt operator to do the comparision */
+
+db.movie.find({invested_amount:{$gt:10000}},{name:1,invested_amount:1});
+
+/* Output the name of the movie , invested amount of all those who have genre Fiction 
+( case insensitive search)
+*/
+
+db.movie.find({genre : /fiction/i },{name:1,invested_amount:1});
+
+

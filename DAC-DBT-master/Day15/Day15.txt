@@ -1,0 +1,80 @@
+// simple demo on connecting to database using studio 3t and performing CRUD 
+// create collection
+db.createCollection('try');
+// drop collection
+db.try.drop();
+// show collections 
+show collections;
+db.getCollectionNames();
+
+// insert into the collection
+db.try.insertOne({key : 'value'});
+db.try.find({key : 'value'});
+db.try.insertMany([{key : 'value'},{key : 'value'}]);
+
+// delete 
+db.try.deleteMany({});
+db.try.deleteOne({key : 'value'});
+
+// update 
+db.try.updateOne({key : 'value'},{$set : {key : 'my_updated_value'} });
+//update try set key = 'my_updated value' where key= 'value' ;
+db.try.updateMany({key : 'value'},{$set : {key : 'my_updated_value'} });
+db.try.find();
+
+
+-- Array's operators 
+// Query for embedded json
+// book_name and publication whose has atleast one supplier from chennai (CI)
+
+db.EMBEDDED_JSON.find({BOOKS_SUPPLIED : { $elemMatch: {ADDRESS : /CHENNAI/i}} },{BOOK_TITLE:1,PUBLICATION:1,BOOKS_SUPPLIED:1});
+// BOOKS_SUPPLIED : { $elemMatch: {ADDRESS : /CHENNAI/I}} 
+
+
+db.EMBEDDED_JSON.find();
+
+// https://www.mongodb.com/docs/v6.0/reference/operator/query/all/
+
+
+---------------------------------------
+/// Indexes DEMO and sorting after find function
+---------------------------------------
+
+db.LMS_BOOK_ISSUE.dropIndex({ "BOOK_ISSUE_NO" : 1 } );
+
+db.LMS_BOOK_ISSUE.find({BOOK_ISSUE_NO : {$gt : 5 }},{});
+db.LMS_BOOK_ISSUE.createIndex( { "BOOK_ISSUE_NO" : 1 }, { unique: true } )
+db.LMS_BOOK_ISSUE.find({BOOK_ISSUE_NO : {$gt : 5 }},{});
+
+db.LMS_BOOK_ISSUE.dropIndex({ "BOOK_ISSUE_NO" : 1  } );
+
+db.LMS_BOOK_ISSUE.createIndex( { "BOOK_ISSUE_NO" : 1 , MEMBER_ID :1 }, {name : "test_ind"},{ unique: true })
+
+db.LMS_BOOK_ISSUE.find({BOOK_ISSUE_NO : {$gt : 5 }},{});
+
+db.LMS_BOOK_ISSUE.find({BOOK_ISSUE_NO : {$gt : 5 }},{}).sort({"BOOK_ISSUE_NO" : -1});
+db.LMS_BOOK_ISSUE.g;
+
+
+-- discussion on some sample questions
+
+grade (grade_id(pk) , grade_desc)
+dept ( dept_id(pk), dept_name)
+emp (emp_id(pk) , date_of_joining ,gender,dob,mgr_id , grade_id(FK), dept_id(Fk),desg_id(Fk)) 
+salary (salary_id(pk),salary_allowance , year,emp_id(Fk) )
+desg (desg_id(pk) , desg_description)
+history ( history_id,grade_id(Fk),emp_id(Fk+ not null),desg_id(Fk))
+average_age (average_age number(10,3))
+
+
+select * from salary where year = 2012
+and salary_allowance between 1000 and 1500
+and salary_allowance >= 1000 and  salary_allowance  <= 1500;
+
+select * from employee where emp_id 
+in (select mgr_id from emp
+group by mgr_id 
+having count(*) >=2)
+
+
+
